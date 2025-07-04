@@ -6,13 +6,22 @@ package com.ngocdo.it2301quizzapp;
 
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
+
+import com.ngocdo.pojo.Category;
+import com.ngocdo.services.CategoryService;
+import com.ngocdo.utils.JdbcConnector;
+
+import javafx.collections.FXCollections;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javax.xml.transform.Result;
+import javafx.scene.control.ComboBox;
 
 /**
  * FXML Controller class
@@ -20,6 +29,9 @@ import javax.xml.transform.Result;
  * @author admin
  */
 public class QuestionsController implements Initializable {
+    @FXML
+    private ComboBox<Category> cbCates;
+    private static final CategoryService cateService = new CategoryService();
 
     /**
      * Initializes the controller class.
@@ -27,24 +39,11 @@ public class QuestionsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        try{
-            //B1: nap driver
-            Class.forName("com.sql.cj.jdbc.Driver");
-            
-            //B2: thiet lap ket noi
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/quizzdb", "root", "root");
-            
-            //B3: Thuc thi truy van
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("Select * From category");
-            while(rs.next()){
-                int id = rs.getInt("id");
-                String ten=rs.getString("name");
-            }
-        }
-        catch(ClassNotFoundException | SQLException ex){
+        try {
+            this.cbCates.setItems(FXCollections.observableList(cateService.getCates()));
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
-    }    
-    
+    }
+
 }

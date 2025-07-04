@@ -1,12 +1,14 @@
 package com.ngocdo.it2301quizzapp;
 
+import java.io.IOException;
+
+import com.ngocdo.utils.JdbcConnector;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 /**
  * JavaFX App
@@ -22,6 +24,13 @@ public class App extends Application {
         stage.setTitle("QuizzApp");
         stage.show();
     }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+
+        JdbcConnector.getInstance().close();
+    }  
 
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
